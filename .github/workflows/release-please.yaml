@@ -47,7 +47,7 @@ jobs:
     - name: Create PR with dist
       uses: peter-evans/create-pull-request@v3
       with:
-        token: ${{ secrets.ACTIONS_BOT_TOKEN }}
+        token: ${{ github.token }}
         commit-message: Build dist
         author: "actions-bot <github-actions-bot@google.com>"
         title: "chore: build dist"
@@ -65,7 +65,7 @@ jobs:
       - uses: GoogleCloudPlatform/release-please-action@main
         id: release
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ github.token }}
           release-type: node
           package-name: ${{env.ACTION_NAME}}
           command: github-release
@@ -93,7 +93,7 @@ jobs:
       - id: release-pr
         uses: GoogleCloudPlatform/release-please-action@main
         with:
-          token: ${{ secrets.ACTIONS_BOT_TOKEN }}
+          token: ${{ github.token }}
           release-type: node
           fork: true
           package-name: ${{env.ACTION_NAME}}
@@ -102,7 +102,7 @@ jobs:
         if: ${{ steps.release-pr.outputs.pr }}
         uses: actions/github-script@v3
         with:
-            github-token: ${{secrets.GITHUB_TOKEN}}
+            github-token: ${{ github.token }}
             script: |
               const [owner, repo] = process.env.GITHUB_REPOSITORY.split('/');
               await github.issues.addLabels({
